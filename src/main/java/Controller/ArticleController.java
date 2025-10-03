@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ArticleController {
 
-    private final String API_KEY = "22d39513fa0109a11b2d9d0a09c553203ac80715fee63e3f4b6c9a82fe5f3ee8"; // 🔑 API key goes here
+    private final String API_KEY = ""; // 🔑 API key goes here
     private ArticleView view;
 
 
