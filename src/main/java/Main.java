@@ -4,6 +4,10 @@ import View.ArticleView;
 
 import javax.swing.*;
 
+/**
+ * Entry point for the Google Scholar article search application.
+ * Initializes the GUI and binds the controller to the search button.
+ */
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

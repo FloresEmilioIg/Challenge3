@@ -10,12 +10,20 @@ import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * GUI class for displaying Google Scholar search results in a JTable.
+ * Allows searching articles and opening article links in a browser.
+ */
 public class ArticleView extends JFrame {
+
     private JTable table;
     private DefaultTableModel tableModel;
     private JTextField searchField;
     private JButton searchButton;
 
+    /**
+     * Constructs the main view window and initializes components.
+     */
     public ArticleView() {
         setTitle("Google Scholar Search - SerpApi");
         setSize(800, 400);
@@ -34,7 +42,12 @@ public class ArticleView extends JFrame {
 
         // Article table
         String[] columns = {"Title", "Authors", "Year", "Cited By", "Link"};
-        tableModel = new DefaultTableModel(columns, 0);
+        tableModel = new DefaultTableModel(columns, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // cells are non-editable
+            }
+        };
         table = new JTable(tableModel);
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -42,6 +55,7 @@ public class ArticleView extends JFrame {
         add(searchPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
+        // Double-click to open link
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) { // double clic
@@ -57,16 +71,31 @@ public class ArticleView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Returns the current search query entered by the user.
+     *
+     * @return the search query text
+     */
     public String getSearchQuery() {
         return searchField.getText();
     }
 
+    /**
+     * Returns the search button component for event binding.
+     *
+     * @return the search JButton
+     */
     public JButton getSearchButton() {
         return searchButton;
     }
 
+    /**
+     * Updates the table to display the given list of articles.
+     *
+     * @param articles list of Article objects
+     */
     public void displayArticles(List<Article> articles) {
-        tableModel.setRowCount(0); // limpiar tabla
+        tableModel.setRowCount(0); // clean table
         for (Article article : articles) {
             tableModel.addRow(new Object[]{
                     article.getTitle(),
@@ -78,10 +107,20 @@ public class ArticleView extends JFrame {
         }
     }
 
+    /**
+     * Displays an error message in a dialog.
+     *
+     * @param message the error message
+     */
     public void displayError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Opens the given URL in the default system browser.
+     *
+     * @param url the URL to open
+     */
     private void openInBrowser(String url) {
         try {
             if (Desktop.isDesktopSupported()) {

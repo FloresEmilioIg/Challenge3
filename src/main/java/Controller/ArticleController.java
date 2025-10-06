@@ -2,6 +2,8 @@ package Controller;
 
 import Model.Article;
 import View.ArticleView;
+import db.ArticleD;
+import db.DatabaseManager;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -16,18 +18,35 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class responsible for communicating with the Google Scholar API
+ * through SerpApi, processing the results, and updating the database.
+ */
 public class ArticleController {
 
-    private final String API_KEY = ""; // 🔑 API key goes here
+    /** API key for SerpApi requests */
+    private final String API_KEY = "22d39513fa0109a11b2d9d0a09c553203ac80715fee63e3f4b6c9a82fe5f3ee8"; // 🔑 API key goes here
     private ArticleView view;
+    private ArticleD dao;
 
-
-
+    /**
+     * Constructs an ArticleController with the given view.
+     * Initializes the database connection.
+     *
+     * @param view the GUI view associated with this controller
+     */
     public ArticleController(ArticleView view) {
             this.view = view;
+            this.dao = new ArticleD();
+            DatabaseManager.initializeDatabase();
         }
 
-
+    /**
+     * Searches for articles on Google Scholar through SerpApi using the specified query.
+     * Populates the view with the results and saves them to the database.
+     *
+     * @param query the author name or topic to search for
+     */
     public void searchArticles(String query) {
         List<Article> articles = new ArrayList<>();
 
@@ -51,7 +70,7 @@ public class ArticleController {
 
                         String title = obj.optString("title", "N/A");
 
-                        // Autores y año
+                        // Authors and year
                         String authors = "N/A";
                         String year = "N/A";
                         if (obj.has("publication_info")) {
@@ -60,7 +79,7 @@ public class ArticleController {
                             year = pubInfo.optString("year", "N/A");
                         }
 
-                        // Citaciones
+                        // Citations
                         String citedBy = "0";
                         if (obj.has("inline_links")) {
                             JSONObject links = obj.getJSONObject("inline_links");
@@ -73,6 +92,9 @@ public class ArticleController {
 
                         articles.add(new Article(title, authors, year, citedBy, link));
                     }
+                    // Update GUI and database
+                    view.displayArticles(articles);
+                    dao.saveArticles(query, articles);
                 }
 
                 view.displayArticles(articles);
