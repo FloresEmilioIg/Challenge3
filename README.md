@@ -1,62 +1,126 @@
 # Challenge3
+## 📌 **Project Purpose**
 
-📌 Project Purpose
+The main goal of Challenge3 is to develop a Java application using the MVC (Model-View-Controller) design pattern that retrieves academic data from the Google Scholar Author API via SerpApi, processes the data, and stores it in a structured MySQL database.
 
-The main goal of this project is to develop a Java application using the MVC (Model-View-Controller) design pattern to perform GET requests to the Google Scholar Author API, retrieve academic data, and integrate it into a structured database.
+This project emphasizes:
 
-This project emphasizes clean architecture, modular development, and reliability when interacting with external APIs.
+- Clean architecture
 
-⚙️ Key Functionalities
+- Modular development
 
-API Consumption: Perform GET requests to the Google Scholar Author API.
+- Robust API interaction and error handling
 
-Error Handling: Manage API errors (timeouts, invalid responses, rate limits).
+It provides a user-friendly GUI for searching academic authors or topics and viewing their publications.
 
-Pagination Support: Correctly handle paginated responses from the API.
+## ⚙️ **Key Functionalities**
 
-Database Integration: Store retrieved author and publication data in a relational database with a consistent schema.
+- API Consumption: Performs GET requests to the Google Scholar Author API through SerpApi.
 
-MVC Design Pattern: Clear separation of responsibilities (Model = database/data objects, View = user interaction, Controller = request/data flow management).
+- Error Handling: Manages network errors, invalid responses, and API rate limits.
 
-Unit Testing: Ensure reliability of API requests, pagination, and database operations.
+- Data Parsing: Extracts relevant publication details such as title, authors, year, citation count, and link.
 
-Documentation: Provide clear references and technical notes to facilitate maintenance and future extensions.
+- Database Integration: Stores retrieved data in a MySQL database with a consistent schema, preventing duplicates.
 
-🌍 Project Relevance
+- MVC Design Pattern: Separates concerns clearly:
 
-This project addresses the challenge of automating the retrieval and organization of academic data.
+  - Model – represents data (Article class)
 
-For researchers: it simplifies data collection from Google Scholar.
+  - View – handles GUI interactions (ArticleView)
 
-For institutions: it helps structure large volumes of publication data for analysis and reporting.
+  - Controller – manages API requests, data processing, and updates (ArticleController)
 
-For developers: it serves as a reusable and extensible example of API integration with Java, MVC, and databases.
+- GUI Features: Search field, results table, double-click to open article links.
 
-In short, it facilitates access, storage, and structured use of academic author data.
+- Unit Testing Ready: Designed to allow testing of API requests, data parsing, and database persistence.
 
-📑 Technical Documentation
+- Documentation: Fully documented with Javadoc for all classes.
 
-The technical document describing the Google Scholar Author API is included in this repository under:
+## 🌍 **Project Relevance**
 
-Sprint1_CH3.pdf
+This application simplifies the retrieval and organization of academic publication data:
+
+- For researchers: Speeds up collection of publication metrics and author data.
+
+- For institutions: Helps structure and analyze large volumes of publication data.
+
+- For developers: Serves as a reusable example of API integration, Java MVC design, and database interaction.
+
+In short, it enables structured access, storage, and usage of Google Scholar data.
+
+## 🛠 **Technical Overview**
+**Classes**
+
+Model:
+
+- Article – represents an academic article, including title, authors, year, citation count, and link.
+
+DAO / Database:
+
+- ArticleD – handles saving articles to MySQL, avoids duplicates, and parses citation counts.
+
+- DatabaseManager – manages database connection and table initialization.
+
+Controller:
+
+- ArticleController – performs API requests, parses JSON responses, updates the database, and passes data to the view.
+
+View:
+
+- ArticleView – GUI for user interaction, displays articles in a table, allows opening links.
+
+Main:
+
+- Initializes GUI and binds search functionality.
+
+## **Database Schema**
+Table: articles
+
+| Column             | Type               | Description                   |
+| ------------------ | ------------------ | ----------------------------- |
+| `id`               | INT AUTO_INCREMENT | Primary key                   |
+| `researcher_name`  | VARCHAR(255)       | Name of the author/researcher |
+| `title`            | TEXT               | Article title                 |
+| `authors`          | TEXT               | Comma-separated authors       |
+| `publication_date` | VARCHAR(50)        | Year of publication           |
+| `abstract`         | TEXT               | Currently empty               |
+| `link`             | TEXT               | URL to the article            |
+| `keywords`         | TEXT               | Currently empty               |
+| `cited_by`         | INT                | Citation count                |
 
 
-It provides details about:
+## **API Documentation**
 
-Endpoints: URLs used to access different API functions.
+Technical document Sprint1_CH3.pdf included in the repository provides:
 
-Authentication methods: How to obtain and use access keys or tokens.
+- Endpoints and query parameters
 
-Query parameters: Options to filter and customize searches.
+- Authentication and API key usage
 
-Response formats: How the returned data is structured.
+- Response formats
 
-Usage limits: Restrictions on the number of requests you can make.
+- Usage limits
 
-Code examples: Demonstrations of how to use the API in different programming languages.
+- Code examples for integration
 
-🔒 Repository Access
+## 🔒 **Repository Access**
 
-The repository has been configured with the necessary permissions to ensure that the Digital NAO team can easily access, clone, and contribute to the project.
+The repository is configured for the Digital NAO team to easily access, clone, and contribute.
+If access issues arise, please contact the repository maintainer.
 
-If you encounter issues with access rights, please contact the repository maintainer.
+## ✅ **Javadoc Documentation**
+
+All project classes are documented using Javadoc:
+
+- Model: Article.java
+
+- Database / DAO: ArticleD.java, DatabaseManager.java
+
+- Controller: ArticleController.java
+
+- View: ArticleView.java
+
+- Entry Point: Main.java
+
+Developers can generate HTML Javadoc from the source to explore class details and methods.
